@@ -1,4 +1,4 @@
-const Profile = require("../models/profileSchema.js");
+const NameProfile = require("../models/profileSchema.js");
 
 const analyze = async (req, res) => {
   const name = req.body.name;
@@ -23,11 +23,12 @@ const analyze = async (req, res) => {
       prev.probability > current.probability ? prev : current,
     );
 
-    const existing = await Profile.findOne({ name });
+    const existing = await NameProfile.findOne({ name });
     if (existing)
-      return res.json({ message: "Profile already exists", data: existing });
+      return res.json({ message: "NameProfile already exists", data: existing });
 
-    const result = await Profile.create({
+    const result = await NameProfile.create({
+
       name: age.name,
       gender: genderize.gender,
       age: age.age,
@@ -37,6 +38,7 @@ const analyze = async (req, res) => {
     });
 
     res.json({
+      _id: result._id,
       name: result.name,
       gender: result.gender,
       age: result.age,
@@ -49,4 +51,37 @@ const analyze = async (req, res) => {
   }
 };
 
-module.exports = analyze;
+const getAnalyze = async (req, res) => {
+  const { gender, countryId } = req.query
+
+  try {
+    const filter = {}
+    if (gender) filter.gender = gender
+    if (countryId) filter.countryId = countryId
+    const result = await NameProfile.find(filter);
+    res.json(result);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
+
+const getId = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const result = await NameProfile.findById(userId);
+    res.json(result);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+};
+const deleteId = async (req, res) => {
+  const userId = req.params.id;
+  try {
+    const result = await NameProfile.findByIdAndDelete(userId);
+    res.json(result);
+  } catch (err) {
+    res.json({ message: err.message });
+  }
+
+};
+module.exports = { analyze, getAnalyze, getId, deleteId };
