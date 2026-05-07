@@ -5,9 +5,8 @@ const profileSchema = new mongoose.Schema({
   gender: { type: String, required: true },
   age: { type: Number, required: true },
   count: { type: Number, required: true },
-  genderProbability: { type: Number, required: true },
-  nationality: { type: String, required: true },
   countryId: { type: String, required: true },
+  probability: { type: Number, required: true },
   createsAt: {type: Date, default: Date.now()}
 });
 
