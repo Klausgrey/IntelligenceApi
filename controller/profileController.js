@@ -25,10 +25,12 @@ const analyze = async (req, res) => {
 
     const existing = await NameProfile.findOne({ name });
     if (existing)
-      return res.json({ message: "NameProfile already exists", data: existing });
+      return res.json({
+        message: "NameProfile already exists",
+        data: existing,
+      });
 
-    const result = await NameProfile.create({
-
+    const result = await nameprofile.create({
       name: age.name,
       gender: genderize.gender,
       age: age.age,
@@ -52,13 +54,15 @@ const analyze = async (req, res) => {
 };
 
 const getAnalyze = async (req, res) => {
-  const { gender, countryId } = req.query
-
+  const { gender, countryId } = req.query;
+  const sort = req.query.sort;
+  const order = req.query.order === "desc" ? -1 : 1;
   try {
-    const filter = {}
-    if (gender) filter.gender = gender
-    if (countryId) filter.countryId = countryId
-    const result = await NameProfile.find(filter);
+    const filter = {};
+
+    if (gender) filter.gender = gender;
+    if (countryId) filter.countryId = countryId;
+    const result = await NameProfile.find(filter).sort({ [sort]: order });
     res.json(result);
   } catch (err) {
     res.json({ message: err.message });
@@ -82,6 +86,5 @@ const deleteId = async (req, res) => {
   } catch (err) {
     res.json({ message: err.message });
   }
-
 };
 module.exports = { analyze, getAnalyze, getId, deleteId };
