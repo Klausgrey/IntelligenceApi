@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const {
-  analyze,
-  getAnalyze,
-  getId,
-  deleteId,
+	analyze,
+	getAnalyze,
+	getId,
+	deleteId,
 } = require("../controller/profileController");
 
 router.post("/analyze", analyze);
